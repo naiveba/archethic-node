@@ -19,6 +19,10 @@ jobs:
           - 9042:9042
         options: --health-cmd "cqlsh --debug" --health-interval 5s --health-retries 10
     steps:
+    - name: Install OS Packages
+      uses: mstksg/get-package@2a4b48d55d72d43ca89ae58ec9ca1397d34a1c35
+      with:
+        apt-get: libgmp-dev libssl-dev libtinfo-dev libsystemd-dev zlib1g-dev libsodium-dev
     - uses: actions/checkout@v2
     - name: Set up Elixir
       uses: erlef/setup-beam@988e02bfe678367a02564f65ca2e37726dc0268f
