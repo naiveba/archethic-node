@@ -1,3 +1,4 @@
+# Setup Github CI actions instead of leveraging Git hooks during git push
 name: Elixir CI
 
 on:
@@ -11,17 +12,14 @@ jobs:
 
     name: Build and test
     runs-on: ubuntu-latest
-
+    services:
+      cassandra:
+        image: scylladb/scylla
+        ports:
+          - 9042:9042
+        options: --health-cmd "cqlsh --debug" --health-interval 5s --health-retries 10
     steps:
     - uses: actions/checkout@v2
-    - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
     - name: Set up Elixir
       uses: erlef/setup-beam@988e02bfe678367a02564f65ca2e37726dc0268f
       with:
@@ -33,7 +31,17 @@ jobs:
         path: deps
         key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
         restore-keys: ${{ runner.os }}-mix-
+    - name: Make Clean
+      run: mix clean
     - name: Install dependencies
       run: mix deps.get
+    - name: Set Formatting
+      run: mix format --check-formatted
+#     - name: Compile the codebase
+#       run: mix compile --warnings-as-errors
+    - name: Set credo
+      run: mix credo 
     - name: Run tests
-      run: mix test
+#       run: mix test --trace
+    - name: Run Dialyzer
+      run: mix dialyzer
