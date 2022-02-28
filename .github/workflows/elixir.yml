@@ -43,5 +43,5 @@ jobs:
       run: mix credo 
 #     - name: Run tests
 #       run: mix test --trace
-    - name: Run Dialyzer
-      run: mix dialyzer
+#     - name: Run Dialyzer
+#       run: mix dialyzer
