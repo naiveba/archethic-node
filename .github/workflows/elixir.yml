@@ -45,7 +45,7 @@ jobs:
       run: mix compile --warnings-as-errors
     - name: Set credo
       run: mix credo 
-#     - name: Run tests
-#       run: mix test --trace
-#     - name: Run Dialyzer
-#       run: mix dialyzer
+    - name: Run tests
+      run: mix test --trace
+    - name: Run Dialyzer
+      run: mix dialyzer
